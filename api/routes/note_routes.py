@@ -11,4 +11,4 @@ def list_notes():
 
 @router.get("/{note_id}")
 def show_note(note_id: int):
-    return service.get(note_id)
+    return service.show(note_id)
