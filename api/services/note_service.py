@@ -1,5 +1,4 @@
-from fastapi import HTTPException, status
-
+from api.exceptions import ResourceNotFoundException
 from api.models import NoteModel
 from api.repositories import NoteRepository
 
@@ -14,8 +13,5 @@ class NoteService:
     def show(self, note_id: int) -> NoteModel:
         note = self.repository.get_note_by_id(note_id)
         if not note:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Note with id {note_id} not found",
-            )
+            raise ResourceNotFoundException(resource_name="Note", resource_id=note_id)
         return note
