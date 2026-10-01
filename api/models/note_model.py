@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Integer, String
+from sqlalchemy import Boolean, DateTime, Integer, String, func
 from sqlalchemy.orm import Mapped, mapped_column
 
 from api.config.database import Base
@@ -11,4 +11,6 @@ class NoteModel(Base):
     content: Mapped[str] = mapped_column(String, nullable=False)
     is_done: Mapped[bool] = mapped_column(Boolean, default=False)
     deadline: Mapped[str] = mapped_column(String, nullable=True)
-    created_at: Mapped[str] = mapped_column(String, nullable=False)
+    created_at: Mapped[str] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
