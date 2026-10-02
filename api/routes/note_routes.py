@@ -14,6 +14,6 @@ def list_notes():
 def show_note(note_id: int):
     return service.show(note_id)
 
-@router.post("/")
+@router.post("/", status_code=201)
 def create_note(payload: NoteCreateValidator):
     return service.create(payload)
