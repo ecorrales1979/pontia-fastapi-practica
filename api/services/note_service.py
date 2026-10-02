@@ -15,3 +15,9 @@ class NoteService:
         if not note:
             raise ResourceNotFoundException(resource_name="Note", resource_id=note_id)
         return note
+
+    def create(self, note_data: dict) -> NoteModel:
+        return self.repository.create_note({
+            "content": note_data["content"],
+            "deadline": note_data["deadline"] or None
+        })
