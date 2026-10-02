@@ -1,6 +1,7 @@
 from api.exceptions import ResourceNotFoundException
 from api.models import NoteModel
 from api.repositories import NoteRepository
+from api.validators.note_create_validator import NoteCreateValidator
 
 
 class NoteService:
@@ -16,8 +17,8 @@ class NoteService:
             raise ResourceNotFoundException(resource_name="Note", resource_id=note_id)
         return note
 
-    def create(self, note_data: dict) -> NoteModel:
+    def create(self, note_data: NoteCreateValidator) -> NoteModel:
         return self.repository.create_note({
-            "content": note_data["content"],
-            "deadline": note_data["deadline"] or None
+            "content": note_data.content,
+            "deadline": note_data.deadline or None
         })
