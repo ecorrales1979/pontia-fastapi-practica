@@ -1,6 +1,6 @@
 from api.config.database import SessionLocal
 from api.models import NoteModel
-from api.schemas import NoteCreateData
+from api.schemas import NoteCreateData, NoteUpdateData
 
 
 class NoteRepository:
@@ -19,3 +19,14 @@ class NoteRepository:
             db.commit()
             db.refresh(new_note)
             return new_note
+
+    def update_note(self, note_id: int, note_data: NoteUpdateData) -> NoteModel | None:
+        with SessionLocal() as db:
+            note = db.query(NoteModel).filter(NoteModel.id == note_id).first()
+            if not note:
+                return None
+            for key, value in note_data.items():
+                setattr(note, key, value)
+            db.commit()
+            db.refresh(note)
+            return note
