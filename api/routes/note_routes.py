@@ -1,7 +1,10 @@
 from fastapi import APIRouter
 
 from api.services import NoteService
-from api.validators.note_create_validator import NoteCreateValidator
+from api.validators import (
+    NoteCreateValidator,
+    NoteUpdateValidator,
+)
 
 router = APIRouter(prefix="/notes", tags=["Notes"])
 service = NoteService()
@@ -17,3 +20,9 @@ def show_note(note_id: int):
 @router.post("/", status_code=201)
 def create_note(payload: NoteCreateValidator):
     return service.create(payload)
+
+@router.put("/{note_id}")
+def update_note(note_id: int, payload: NoteUpdateValidator):
+    note = service.update(note_id, payload)
+    print(f"Updated note on router: {note}")
+    return note
