@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 
 from api.services import NoteService
-from api.validators import (
+from api.validators.note_validators import (
     NoteCreateValidator,
-    NoteDoneChangeValidator,
+    NoteSetDoneValidator,
     NoteUpdateValidator,
 )
 
@@ -27,5 +27,5 @@ def update_note(note_id: int, payload: NoteUpdateValidator):
     return service.update(note_id, payload)
 
 @router.patch("/{note_id}/done")
-def change_note_status(note_id: int, payload: NoteDoneChangeValidator):
+def change_note_status(note_id: int, payload: NoteSetDoneValidator):
     return service.change_status(note_id=note_id, is_done=payload.is_done)

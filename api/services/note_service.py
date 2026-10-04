@@ -1,7 +1,7 @@
 from api.exceptions import ResourceNotFoundException
 from api.models import NoteModel
 from api.repositories import NoteRepository
-from api.validators import NoteCreateValidator, NoteUpdateValidator
+from api.validators.note_validators import NoteCreateValidator, NoteUpdateValidator
 
 
 class NoteService:
