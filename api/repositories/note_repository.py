@@ -30,3 +30,13 @@ class NoteRepository:
             db.commit()
             db.refresh(note)
             return note
+
+    def change_note_status(self, note_id: int, is_done: bool) -> NoteModel | None:
+        with SessionLocal() as db:
+            note = db.query(NoteModel).filter(NoteModel.id == note_id).first()
+            if not note:
+                return None
+            note.is_done = is_done
+            db.commit()
+            db.refresh(note)
+            return note
