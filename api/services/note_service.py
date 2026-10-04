@@ -38,3 +38,9 @@ class NoteService:
         if not note:
             raise ResourceNotFoundException(resource_name="Note", resource_id=note_id)
         return note
+
+    def delete(self, note_id: int) -> bool:
+        was_deleted = self.repository.delete_note(note_id)
+        if not was_deleted:
+            raise ResourceNotFoundException(resource_name="Note", resource_id=note_id)
+        return True

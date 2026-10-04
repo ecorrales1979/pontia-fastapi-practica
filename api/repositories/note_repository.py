@@ -40,3 +40,12 @@ class NoteRepository:
             db.commit()
             db.refresh(note)
             return note
+
+    def delete_note(self, note_id: int) -> bool:
+        with SessionLocal() as db:
+            note = db.query(NoteModel).filter(NoteModel.id == note_id).first()
+            if not note:
+                return False
+            db.delete(note)
+            db.commit()
+            return True

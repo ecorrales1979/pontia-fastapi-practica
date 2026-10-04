@@ -29,3 +29,7 @@ def update_note(note_id: int, payload: NoteUpdateValidator):
 @router.patch("/{note_id}/done")
 def change_note_status(note_id: int, payload: NoteSetDoneValidator):
     return service.change_status(note_id=note_id, is_done=payload.is_done)
+
+@router.delete("/{note_id}")
+def delete_note(note_id: int):
+    return service.delete(note_id)
