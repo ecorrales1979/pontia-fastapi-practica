@@ -23,6 +23,4 @@ def create_note(payload: NoteCreateValidator):
 
 @router.put("/{note_id}")
 def update_note(note_id: int, payload: NoteUpdateValidator):
-    note = service.update(note_id, payload)
-    print(f"Updated note on router: {note}")
-    return note
+    return service.update(note_id, payload)

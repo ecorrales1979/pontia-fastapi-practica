@@ -31,5 +31,4 @@ class NoteService:
         })
         if not note:
             raise ResourceNotFoundException(resource_name="Note", resource_id=note_id)
-        print(f"Updated note 1: {note}")
         return note
