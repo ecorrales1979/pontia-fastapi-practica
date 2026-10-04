@@ -32,3 +32,9 @@ class NoteService:
         if not note:
             raise ResourceNotFoundException(resource_name="Note", resource_id=note_id)
         return note
+
+    def change_status(self, note_id: int, is_done: bool) -> NoteModel:
+        note = self.repository.change_note_status(note_id, is_done)
+        if not note:
+            raise ResourceNotFoundException(resource_name="Note", resource_id=note_id)
+        return note
