@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 
 from api.services import NoteService
 from api.validators.note_validators import (
@@ -18,7 +18,7 @@ def list_notes():
 def show_note(note_id: int):
     return service.show(note_id)
 
-@router.post("/", status_code=201)
+@router.post("/", status_code=status.HTTP_201_CREATED)
 def create_note(payload: NoteCreateValidator):
     return service.create(payload)
 
@@ -30,6 +30,6 @@ def update_note(note_id: int, payload: NoteUpdateValidator):
 def change_note_status(note_id: int, payload: NoteSetDoneValidator):
     return service.change_status(note_id=note_id, is_done=payload.is_done)
 
-@router.delete("/{note_id}")
+@router.delete("/{note_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_note(note_id: int):
     return service.delete(note_id)
