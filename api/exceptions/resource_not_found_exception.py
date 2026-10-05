@@ -1,4 +1,4 @@
-from . import DomainException
+from .domain_exception import DomainException
 
 
 class ResourceNotFoundException(DomainException):

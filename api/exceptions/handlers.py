@@ -1,7 +1,9 @@
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 
-from . import DomainException, ResourceNotFoundException
+from .database_exception import DatabaseException
+from .domain_exception import DomainException
+from .resource_not_found_exception import ResourceNotFoundException
 
 
 def format_error_response(status_code: int, message: str, error_code: str | None = None):
@@ -20,6 +22,14 @@ def register_exception_handlers(app: FastAPI):
             status_code=status.HTTP_404_NOT_FOUND,
             message=str(exc),
             error_code="RESOURCE_NOT_FOUND",
+        )
+
+    @app.exception_handler(DatabaseException)
+    async def database_exception_handler(req: Request, exc: DatabaseException):
+        return format_error_response(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            message=str(exc),
+            error_code="DATABASE_ERROR",
         )
 
     @app.exception_handler(DomainException)
