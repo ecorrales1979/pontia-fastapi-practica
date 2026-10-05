@@ -1,5 +1,5 @@
-from .note_mixins import ContentMixin, DeadlineMixin
+from .note_mixins import ContentMixin, DeadlineMixin, TitleMixin
 
 
-class NoteCreateValidator(ContentMixin, DeadlineMixin):
+class NoteCreateValidator(ContentMixin, DeadlineMixin, TitleMixin):
     pass

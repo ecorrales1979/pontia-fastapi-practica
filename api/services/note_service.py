@@ -19,12 +19,14 @@ class NoteService:
 
     def create(self, note_data: NoteCreateValidator) -> NoteModel:
         return self.repository.create_note({
+            "title": note_data.title,
             "content": note_data.content,
             "deadline": note_data.deadline or None
         })
 
     def update(self, note_id: int, note_data: NoteUpdateValidator) -> NoteModel:
         note = self.repository.update_note(note_id, {
+            "title": note_data.title,
             "content": note_data.content,
             "deadline": note_data.deadline or None,
             "is_done": note_data.is_done

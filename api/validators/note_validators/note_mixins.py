@@ -3,6 +3,14 @@ from datetime import date
 from pydantic import BaseModel, Field
 
 
+class TitleMixin(BaseModel):
+    title: str = Field(
+            ...,
+            min_length=1,
+            strip_whitespace=True,
+            description="Title must not be empty"
+        )
+
 class ContentMixin(BaseModel):
     content: str = Field(
             ...,

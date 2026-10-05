@@ -3,6 +3,7 @@ from typing import TypedDict
 
 
 class NoteCreateData(TypedDict):
+    title: str
     content: str
     deadline: date | None
 

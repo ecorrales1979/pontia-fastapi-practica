@@ -10,6 +10,7 @@ class NoteModel(Base):
     __tablename__ = "notes"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    title: Mapped[str] = mapped_column(String, nullable=False)
     content: Mapped[str] = mapped_column(String, nullable=False)
     is_done: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     deadline: Mapped[date|None] = mapped_column(Date, nullable=True)
