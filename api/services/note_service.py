@@ -1,6 +1,7 @@
-from api.exceptions import ResourceNotFoundException
+from api.exceptions import DomainException, ResourceNotFoundException
 from api.models import NoteModel
 from api.repositories import NoteRepository
+from api.utils import DateUtils, TextUtils
 from api.validators.note_validators import NoteCreateValidator, NoteUpdateValidator
 
 
@@ -18,16 +19,22 @@ class NoteService:
         return note
 
     def create(self, note_data: NoteCreateValidator) -> NoteModel:
+        if DateUtils.is_past_date(note_data.deadline):
+            raise DomainException("The deadline cannot be in the past.")
+
         return self.repository.create_note({
-            "title": note_data.title,
-            "content": note_data.content,
+            "title": TextUtils.sanitize_text(note_data.title),
+            "content": TextUtils.sanitize_text(note_data.content),
             "deadline": note_data.deadline or None
         })
 
     def update(self, note_id: int, note_data: NoteUpdateValidator) -> NoteModel:
+        if DateUtils.is_past_date(note_data.deadline):
+            raise DomainException("The deadline cannot be in the past.")
+
         note = self.repository.update_note(note_id, {
-            "title": note_data.title,
-            "content": note_data.content,
+            "title": TextUtils.sanitize_text(note_data.title),
+            "content": TextUtils.sanitize_text(note_data.content),
             "deadline": note_data.deadline or None,
             "is_done": note_data.is_done
         })
