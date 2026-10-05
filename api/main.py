@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from api.config.database import create_tables
+from api.exceptions.handlers import register_exception_handlers
 from api.routes import router
 
 
@@ -20,6 +21,7 @@ def create_app():
     )
 
     app.include_router(router)
+    register_exception_handlers(app)
 
     return app
 
