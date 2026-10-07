@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 
 from api.utils import Logger
 
+from .business_exception import BusinessException
 from .database_exception import DatabaseException
 from .domain_exception import DomainException
 from .resource_not_found_exception import ResourceNotFoundException
@@ -48,6 +49,22 @@ def register_exception_handlers(app: FastAPI):
             status_code=status.HTTP_404_NOT_FOUND,
             message=str(exc),
             error_code="RESOURCE_NOT_FOUND",
+        )
+
+    @app.exception_handler(BusinessException)
+    async def business_exception_handler(req: Request, exc: BusinessException):
+        logger.warning(
+            message=str(exc),
+            context={
+                **_build_request_context(req),
+                "error_code": "BUSINESS_ERROR",
+                "exception_type": type(exc).__name__,
+            },
+        )
+        return format_error_response(
+            status_code=status.HTTP_409_CONFLICT,
+            message=str(exc),
+            error_code="BUSINESS_ERROR",
         )
 
     @app.exception_handler(DatabaseException)
