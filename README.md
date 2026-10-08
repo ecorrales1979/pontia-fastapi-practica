@@ -34,3 +34,11 @@ uvicorn api.main:app
 ```
 
 Para inicializar en un puerto diferente, por ejemplo en el 8888, adicionar `-p 8888` al final del comando anterior.
+
+## Pruebas
+
+Hay un archivo para testar los endpoints usando la biblioteca requests. Para correrlo, ejecutar el comando:
+
+```bash
+python tests/test_requests.py
+```
