@@ -19,7 +19,7 @@ class NoteService:
         return note
 
     def create(self, note_data: NoteCreateValidator) -> NoteModel:
-        if DateUtils.is_past_date(note_data.deadline):
+        if note_data.deadline and DateUtils.is_past_date(note_data.deadline):
             raise BusinessException("The deadline cannot be in the past.")
 
         return self.repository.create_note({
@@ -29,7 +29,7 @@ class NoteService:
         })
 
     def update(self, note_id: int, note_data: NoteUpdateValidator) -> NoteModel:
-        if DateUtils.is_past_date(note_data.deadline):
+        if note_data.deadline and DateUtils.is_past_date(note_data.deadline):
             raise BusinessException("The deadline cannot be in the past.")
 
         note = self.repository.update_note(note_id, {
