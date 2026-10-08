@@ -16,4 +16,4 @@ def get_note_repository(db: DBSessionDependency) -> NoteRepositoryInterface:
 NoteRepositoryDependency: TypeAlias = Annotated[NoteRepositoryInterface, Depends(get_note_repository)]
 
 def get_note_service(repository: NoteRepositoryDependency) -> NoteService:
-    return NoteService(note_repository=repository)
+    return NoteService(repository=repository)
