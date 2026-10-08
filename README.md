@@ -24,6 +24,7 @@ source .venv/bin/activate # o el equivalente según tu Sistema Operativo (ese es
 ```bash
 pip install -r requirements.txt
 ```
+6- Crear variables de ambiente en el archivo .env a partir del .env.example
 
 ## Ejecución
 
