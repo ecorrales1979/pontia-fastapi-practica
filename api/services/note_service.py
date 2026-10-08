@@ -1,19 +1,19 @@
 from api.exceptions import BusinessException, ResourceNotFoundException
 from api.models import NoteModel
-from api.repositories import NoteRepository
+from api.repositories.note_repository import NoteRepositoryInterface
 from api.utils import DateUtils, TextUtils
 from api.validators.note_validators import NoteCreateValidator, NoteUpdateValidator
 
 
 class NoteService:
-    def __init__(self):
-        self.repository = NoteRepository()
+    def __init__(self, repository: NoteRepositoryInterface) -> None:
+        self._repository = repository
 
     def list(self) -> list[NoteModel]:
-        return self.repository.get_notes()
+        return self._repository.get_notes()
 
     def show(self, note_id: int) -> NoteModel:
-        note = self.repository.get_note_by_id(note_id)
+        note = self._repository.get_note_by_id(note_id)
         if not note:
             raise ResourceNotFoundException(resource_name="Note", resource_id=note_id)
         return note
@@ -22,7 +22,7 @@ class NoteService:
         if note_data.deadline and DateUtils.is_past_date(note_data.deadline):
             raise BusinessException("The deadline cannot be in the past.")
 
-        return self.repository.create_note({
+        return self._repository.create_note({
             "title": TextUtils.sanitize_text(note_data.title),
             "content": TextUtils.sanitize_text(note_data.content),
             "deadline": note_data.deadline or None
@@ -32,7 +32,7 @@ class NoteService:
         if note_data.deadline and DateUtils.is_past_date(note_data.deadline):
             raise BusinessException("The deadline cannot be in the past.")
 
-        note = self.repository.update_note(note_id, {
+        note = self._repository.update_note(note_id, {
             "title": TextUtils.sanitize_text(note_data.title),
             "content": TextUtils.sanitize_text(note_data.content),
             "deadline": note_data.deadline or None,
@@ -43,13 +43,13 @@ class NoteService:
         return note
 
     def change_status(self, note_id: int, is_done: bool) -> NoteModel:
-        note = self.repository.change_note_status(note_id, is_done)
+        note = self._repository.change_note_status(note_id, is_done)
         if not note:
             raise ResourceNotFoundException(resource_name="Note", resource_id=note_id)
         return note
 
     def delete(self, note_id: int) -> bool:
-        was_deleted = self.repository.delete_note(note_id)
+        was_deleted = self._repository.delete_note(note_id)
         if not was_deleted:
             raise ResourceNotFoundException(resource_name="Note", resource_id=note_id)
         return True

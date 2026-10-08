@@ -1,8 +1,11 @@
 import os
+from collections.abc import Generator
+from typing import Annotated
 
 from dotenv import load_dotenv
+from fastapi import Depends
 from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
 load_dotenv()
 
@@ -24,3 +27,14 @@ def create_tables():
     import api.models  # noqa: F401
 
     Base.metadata.create_all(bind=engine)
+
+def get_db_session() -> Generator[Session, None, None]:
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+DBSessionDependency = Annotated[Session, Depends(get_db_session)]
+
+
