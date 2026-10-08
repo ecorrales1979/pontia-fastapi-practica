@@ -1,11 +1,11 @@
 from typing import Protocol
 
 from api.models import NoteModel
-from api.schemas import NoteCreateData, NoteUpdateData
+from api.schemas import NoteCreateData, NoteFilterParams, NoteUpdateData
 
 
 class NoteRepositoryInterface(Protocol):
-    def get_notes(self) -> list[NoteModel]:
+    def get_notes(self, filters: NoteFilterParams | None = None) -> list[NoteModel]:
         ...
 
     def get_note_by_id(self, note_id: int) -> NoteModel | None:

@@ -1,9 +1,17 @@
+from datetime import datetime
+
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from api.exceptions import DatabaseException
 from api.models import NoteModel
-from api.schemas import NoteCreateData, NoteUpdateData
+from api.schemas import (
+    DeadlineFilterSchema,
+    NoteCreateData,
+    NoteFilterParams,
+    NoteUpdateData,
+    StatusFilterSchema,
+)
 
 from .note_repository_interface import NoteRepositoryInterface  # noqa: F401
 
@@ -13,9 +21,33 @@ class SQLAlchemyNoteRepository:
     def __init__(self, session: Session):
         self._db = session
 
-    def get_notes(self) -> list[NoteModel]:
+    def get_notes(self, filters: NoteFilterParams | None = None) -> list[NoteModel]:
         try:
-            return self._db.query(NoteModel).all()
+            query = self._db.query(NoteModel)
+
+            if not filters:
+                return query.all()
+
+            status_filter = filters.get("status")
+            if status_filter == StatusFilterSchema.DONE:
+                query = query.filter(NoteModel.is_done == True)
+            elif status_filter == StatusFilterSchema.PENDING:
+                query = query.filter(NoteModel.is_done == False)
+
+            deadline_filter = filters.get("deadline")
+            today = datetime.now(tz="UTC").date()
+            if deadline_filter == DeadlineFilterSchema.EXPIRED:
+                query = query.filter(
+                    NoteModel.deadline.isnot(None),
+                    NoteModel.deadline < today
+                )
+            elif deadline_filter == DeadlineFilterSchema.PENDING:
+                query = query.filter(
+                    NoteModel.deadline.isnot(None),
+                    NoteModel.deadline >= today
+                )
+
+            return query.all()
         except SQLAlchemyError as exc:
             raise DatabaseException("Failed to list notes", exc) from exc
 

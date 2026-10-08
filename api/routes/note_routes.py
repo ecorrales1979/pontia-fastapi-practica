@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, status
 
 from api.config.dependencies.note_dependencies import get_note_service
+from api.schemas import DeadlineQuery, NoteFilterParams, StatusQuery
 from api.services import NoteService
 from api.validators.note_validators import (
     NoteCreateValidator,
@@ -18,10 +19,19 @@ router = APIRouter(
 
 NoteServiceDependency = Annotated[NoteService, Depends(get_note_service)]
 
-
 @router.get("/")
-def list_notes(service: NoteServiceDependency):
-    return service.list()
+def list_notes(
+    service: NoteServiceDependency,
+    deadline: DeadlineQuery = None,
+    status: StatusQuery = None
+):
+    filters: NoteFilterParams = {}
+    if deadline is not None:
+        filters["deadline"] = deadline
+    if status is not None:
+        filters["status"] = status
+
+    return service.list(filters=filters if filters else None)
 
 
 @router.get("/{note_id}")

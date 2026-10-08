@@ -1,6 +1,7 @@
 from api.exceptions import BusinessException, ResourceNotFoundException
 from api.models import NoteModel
 from api.repositories.note_repository import NoteRepositoryInterface
+from api.schemas import NoteFilterParams
 from api.utils import DateUtils, TextUtils
 from api.validators.note_validators import NoteCreateValidator, NoteUpdateValidator
 
@@ -9,8 +10,8 @@ class NoteService:
     def __init__(self, repository: NoteRepositoryInterface) -> None:
         self._repository = repository
 
-    def list(self) -> list[NoteModel]:
-        return self._repository.get_notes()
+    def list(self, filters: NoteFilterParams) -> list[NoteModel]:
+        return self._repository.get_notes(filters)
 
     def show(self, note_id: int) -> NoteModel:
         note = self._repository.get_note_by_id(note_id)
