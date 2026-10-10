@@ -1,6 +1,6 @@
 from api.exceptions import ResourceNotFoundException
 from api.models import UserModel
-from api.repositories.note_repository import UserRepository
+from api.repositories.user_repository import UserRepositoryInterface
 from api.utils import SecurityUtils
 from api.validators.user_validators import (
     UserCreateValidator,
@@ -10,8 +10,8 @@ from api.validators.user_validators import (
 
 
 class UserService:
-    def __init__(self):
-        self.repository = UserRepository()
+    def __init__(self, repository: UserRepositoryInterface):
+        self.repository = repository
 
     def list(self) -> list[UserModel]:
         return self.repository.get_users()
@@ -23,7 +23,7 @@ class UserService:
         return user
 
     def create(self, user_data: UserCreateValidator) -> UserModel:
-        return self.repository.create_note({
+        return self.repository.create_user({
             "email": user_data.email,
             "password": SecurityUtils.hash_password(user_data.password)
         })
@@ -38,22 +38,22 @@ class UserService:
         return user
 
     def change_password(self, user_id: int, password_data: UserSetPasswordValidator) -> UserModel:
-        note = self.repository.change_user_password(user_id, password_data.password)
-        if not note:
+        user = self.repository.change_user_password(user_id, password_data.password)
+        if not user:
             raise ResourceNotFoundException(resource_name="User", resource_id=user_id)
-        return note
+        return user
 
     def change_status(self, user_id: int, is_active: bool) -> UserModel:
-        note = self.repository.change_user_status(user_id, is_active)
-        if not note:
+        user = self.repository.change_user_status(user_id, is_active)
+        if not user:
             raise ResourceNotFoundException(resource_name="User", resource_id=user_id)
-        return note
+        return user
 
     def change_admin(self, user_id: int, is_admin: bool) -> UserModel:
-        note = self.repository.change_user_admin(user_id, is_admin)
-        if not note:
+        user = self.repository.change_user_admin(user_id, is_admin)
+        if not user:
             raise ResourceNotFoundException(resource_name="User", resource_id=user_id)
-        return note
+        return user
 
     def delete(self, user_id: int) -> bool:
         was_deleted = self.repository.delete_user(user_id)
