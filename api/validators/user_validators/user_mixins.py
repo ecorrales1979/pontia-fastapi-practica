@@ -1,29 +1,35 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 
 class EmailMixin(BaseModel):
     email: EmailStr = Field(
             ...,
             min_length=1,
-            strip_whitespace=True,
             description="Email must not be empty"
         )
+
+    model_config = ConfigDict(str_strip_whitespace=True)
+
 
 class PasswordMixin(BaseModel):
     password: str = Field(
             ...,
             min_length=8,
-            strip_whitespace=True,
             description="Password must not be empty"
         )
+
+    model_config = ConfigDict(str_strip_whitespace=True)
+
 
 class PasswordConfirmationMixin(BaseModel):
     password_confirmation: str = Field(
             ...,
             min_length=8,
-            strip_whitespace=True,
             description="Password must not be empty"
         )
+
+    model_config = ConfigDict(str_strip_whitespace=True)
+
 
 class IsActiveMixin(BaseModel):
     is_active: bool = Field(
