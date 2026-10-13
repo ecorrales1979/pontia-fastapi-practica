@@ -5,7 +5,6 @@ import pytest
 from api.exceptions import BusinessException, ResourceNotFoundException
 from api.repositories.note_repository.fake_note_repository import FakeNoteRepository
 from api.services.note_service import NoteService
-from api.utils.logger import Logger
 from tests.mocks.note_mocks import DummyCreateValidator, DummyUpdateValidator
 
 tz = timezone.utc
