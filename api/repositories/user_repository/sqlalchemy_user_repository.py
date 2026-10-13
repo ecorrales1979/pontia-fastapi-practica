@@ -5,6 +5,8 @@ from api.exceptions import DatabaseException
 from api.models import UserModel
 from api.schemas import UserCreateData, UserUpdateData
 
+from .user_repository_interface import UserRepositoryInterface  # noqa: F401
+
 
 class SQLAlchemyUserRepository:
 
