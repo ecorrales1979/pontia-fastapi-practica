@@ -2,6 +2,7 @@ import traceback
 from typing import NamedTuple
 
 from fastapi import FastAPI, Request, status
+from fastapi.exceptions import HTTPException, RequestValidationError
 from fastapi.responses import JSONResponse
 
 from api.utils import Logger
@@ -100,6 +101,25 @@ class ExceptionHandlers:
             handler = cls._create_handler(config)
             app.add_exception_handler(exc_class, handler)
 
+        # Pydantic validations
+        @app.exception_handler(RequestValidationError)
+        async def validation_exception_handler(req: Request, exc: RequestValidationError):
+            return cls._format_error_response(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                message=exc.errors(),
+                error_code="VALIDATION_ERROR",
+            )
+
+        # Native HTTPExceptions
+        @app.exception_handler(HTTPException)
+        async def http_exception_handler(req: Request, exc: HTTPException):
+            return cls._format_error_response(
+                status_code=exc.status_code,
+                message=exc.detail,
+                error_code="HTTP_EXCEPTION",
+            )
+
+        # Generic unhandled exceptions
         @app.exception_handler(Exception)
         async def unhandled_exception_handler(req: Request, exc: Exception):
             logger.critical(
