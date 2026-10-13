@@ -191,7 +191,7 @@ class TestSQLAlchemyNoteRepository:
 
     def test_create_note_raises_database_exception_on_sqlalchemy_error(self):
         mock_session = MagicMock(spec=Session)
-        mock_session.add.side_effect = SQLAlchemyError("Error de conexion SQL")
+        mock_session.add.side_effect = SQLAlchemyError("SQL conexion error")
         repo = SQLAlchemyNoteRepository(session=mock_session)
 
         with pytest.raises(DatabaseException) as exc_info:
