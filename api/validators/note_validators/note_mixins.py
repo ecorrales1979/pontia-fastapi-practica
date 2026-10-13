@@ -1,23 +1,25 @@
 from datetime import date
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class TitleMixin(BaseModel):
     title: str = Field(
             ...,
             min_length=1,
-            strip_whitespace=True,
             description="Title must not be empty"
         )
+
+    model_config = ConfigDict(str_strip_whitespace=True)
 
 class ContentMixin(BaseModel):
     content: str = Field(
             ...,
             min_length=1,
-            strip_whitespace=True,
             description="Content must not be empty"
         )
+
+    model_config = ConfigDict(str_strip_whitespace=True)
 
 class DeadlineMixin(BaseModel):
     deadline: date | None = Field(
