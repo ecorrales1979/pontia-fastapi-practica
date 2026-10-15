@@ -61,8 +61,7 @@ class SQLAlchemyNoteRepository:
         try:
             new_note = NoteModel(**note_data)
             self._db.add(new_note)
-            self._db.commit()
-            self._db.refresh(new_note)
+            self._db.flush()
             return new_note
         except SQLAlchemyError as exc:
             self._db.rollback()
@@ -77,8 +76,7 @@ class SQLAlchemyNoteRepository:
             for key, value in note_data.items():
                 setattr(note, key, value)
 
-            self._db.commit()
-            self._db.refresh(note)
+            self._db.flush()
             return note
         except SQLAlchemyError as exc:
             self._db.rollback()
@@ -91,8 +89,7 @@ class SQLAlchemyNoteRepository:
                 return None
 
             note.is_done = is_done
-            self._db.commit()
-            self._db.refresh(note)
+            self._db.flush()
             return note
         except SQLAlchemyError as exc:
             self._db.rollback()
@@ -105,7 +102,7 @@ class SQLAlchemyNoteRepository:
                 return False
 
             self._db.delete(note)
-            self._db.commit()
+            self._db.flush()
             return True
         except SQLAlchemyError as exc:
             self._db.rollback()

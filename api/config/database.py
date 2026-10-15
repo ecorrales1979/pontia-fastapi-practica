@@ -32,6 +32,7 @@ def get_db_session() -> Generator[Session, None, None]:
     db = SessionLocal()
     try:
         yield db
+        db.commit()
     finally:
         db.close()
 
