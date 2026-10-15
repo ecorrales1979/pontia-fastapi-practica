@@ -2,15 +2,12 @@ from datetime import UTC, datetime, timedelta
 from unittest.mock import Mock
 
 import pytest
-
-# from fastapi.testclient import TestClient
 from starlette.testclient import TestClient
 
 from api.config.dependencies.note_dependencies import get_note_service
 from api.exceptions import (
     BusinessException,
     DatabaseException,
-    DomainException,
     ResourceNotFoundException,
 )
 from api.main import app
