@@ -1,54 +1,49 @@
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from typing import Annotated
+
+from pydantic import BaseModel, EmailStr, Field, StringConstraints
 
 
 class EmailMixin(BaseModel):
-    email: EmailStr = Field(
-            ...,
-            min_length=1,
-            description="Email must not be empty"
-        )
-
-    model_config = ConfigDict(str_strip_whitespace=True)
+    email: Annotated[
+        str,
+        EmailStr,
+        StringConstraints(strip_whitespace=True),
+        Field(min_length=1, description="Email must not be empty")
+    ]
 
 
 class UsernameMixin(BaseModel):
-    username: str = Field(
-            ...,
-            min_length=1,
-            description="Username must not be empty"
-        )
-
-    model_config = ConfigDict(str_strip_whitespace=True)
+    username: Annotated[
+        str,
+        StringConstraints(strip_whitespace=True),
+        Field(min_length=1, description="Username must not be empty")
+    ]
 
 
 class PasswordMixin(BaseModel):
-    password: str = Field(
-            ...,
-            min_length=8,
-            description="Password must not be empty"
-        )
-
-    model_config = ConfigDict(str_strip_whitespace=True)
+    password: Annotated[
+        str,
+        StringConstraints(strip_whitespace=True),
+        Field(min_length=8, description="Password must not be empty")
+    ]
 
 
 class PasswordConfirmationMixin(BaseModel):
-    password_confirmation: str = Field(
-            ...,
-            min_length=8,
-            description="Password must not be empty"
-        )
-
-    model_config = ConfigDict(str_strip_whitespace=True)
+    password_confirmation: Annotated[
+        str,
+        StringConstraints(strip_whitespace=True),
+        Field(min_length=8, description="Password must not be empty")
+    ]
 
 
 class IsActiveMixin(BaseModel):
-    is_active: bool = Field(
-        False,
-        description="Indicates whether the user is active"
-    )
+    is_active: Annotated[
+        bool,
+        Field(description="Indicates whether the user is active")
+    ]
 
 class IsAdminMixin(BaseModel):
-    is_admin: bool = Field(
-        False,
-        description="Indicates whether the user is an admin"
-    )
+    is_admin: Annotated[
+        bool,
+        Field(description="Indicates whether the user is an admin")
+    ]
