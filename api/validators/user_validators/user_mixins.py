@@ -11,6 +11,16 @@ class EmailMixin(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True)
 
 
+class UsernameMixin(BaseModel):
+    username: str = Field(
+            ...,
+            min_length=1,
+            description="Username must not be empty"
+        )
+
+    model_config = ConfigDict(str_strip_whitespace=True)
+
+
 class PasswordMixin(BaseModel):
     password: str = Field(
             ...,

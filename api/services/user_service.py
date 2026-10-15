@@ -25,12 +25,14 @@ class UserService:
     def create(self, user_data: UserCreateValidator) -> UserModel:
         return self.repository.create_user({
             "email": user_data.email,
-            "password": SecurityUtils.hash_password(user_data.password)
+            "password": SecurityUtils.hash_password(user_data.password),
+            "username": user_data.username,
         })
 
     def update(self, user_id: int, user_data: UserUpdateValidator) -> UserModel:
         user = self.repository.update_user(user_id, {
             "email": user_data.email,
+            "username": user_data.username,
             "is_active": user_data.is_active,
         })
         if not user:
