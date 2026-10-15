@@ -1,4 +1,4 @@
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from typing import TypeAlias
 
 DateInput: TypeAlias = date | datetime | str
@@ -8,7 +8,7 @@ class DateUtils:
 
     @staticmethod
     def get_today() -> date:
-        return datetime.now(timezone.utc).date()
+        return datetime.now(UTC).date()
 
     @staticmethod
     def to_date(value: DateInput) -> date:

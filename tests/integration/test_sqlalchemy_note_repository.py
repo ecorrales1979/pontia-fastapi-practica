@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta, timezone
+from datetime import UTC, date, datetime, timedelta
 from unittest.mock import MagicMock
 
 import pytest
@@ -15,8 +15,6 @@ from api.schemas import (
     NoteUpdateData,
     StatusFilterSchema,
 )
-
-tz = timezone.utc
 
 
 class TestSQLAlchemyNoteRepository:
@@ -162,7 +160,7 @@ class TestSQLAlchemyNoteRepository:
         assert pending_notes[0].id == note_pending.id
 
     def test_get_notes_filter_by_deadline(self):
-        today = datetime.now(tz).date()
+        today = datetime.now(UTC).date()
         yesterday = today - timedelta(days=1)
         tomorrow = today + timedelta(days=1)
 

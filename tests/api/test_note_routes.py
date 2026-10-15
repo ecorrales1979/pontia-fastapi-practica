@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from unittest.mock import Mock
 
 import pytest
@@ -16,8 +16,6 @@ from api.exceptions import (
 from api.main import app
 from api.models import NoteModel
 from api.services import NoteService
-
-tz=timezone.utc
 
 
 class TestNoteRoutes:
@@ -109,7 +107,7 @@ class TestNoteRoutes:
     # =========================================================================
 
     def test_create_note_success_returns_201(self):
-        future_date = (datetime.now(tz=tz).date() + timedelta(days=5)).isoformat()
+        future_date = (datetime.now(UTC).date() + timedelta(days=5)).isoformat()
         fake_note = NoteModel(id=1, title="New note", content="Note content", is_done=False)
         self.mock_service.create.return_value = fake_note
 
@@ -134,7 +132,7 @@ class TestNoteRoutes:
         self.mock_service.create.assert_not_called()
 
     def test_create_note_business_exception_returns_409(self):
-        past_date = (datetime.now(tz=tz).date() - timedelta(days=5)).isoformat()
+        past_date = (datetime.now(UTC).date() - timedelta(days=5)).isoformat()
         self.mock_service.create.side_effect = BusinessException(
             "The deadline cannot be in the past."
         )

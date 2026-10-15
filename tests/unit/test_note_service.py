@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import pytest
 
@@ -6,8 +6,6 @@ from api.exceptions import BusinessException, ResourceNotFoundException
 from api.repositories.note_repository.fake_note_repository import FakeNoteRepository
 from api.services.note_service import NoteService
 from tests.mocks.note_mocks import DummyCreateValidator, DummyUpdateValidator
-
-tz = timezone.utc
 
 
 @pytest.fixture
@@ -58,7 +56,7 @@ class TestNoteService:
         assert "Note with id 999 not found" in str(exc_info.value)
 
     def test_create_note_success(self):
-        future_date = datetime.now(tz).date() + timedelta(days=5)
+        future_date = datetime.now(UTC).date() + timedelta(days=5)
         validator = DummyCreateValidator(
             title="Nota nueva",
             content="Contenido escrito por un tonto",
@@ -73,7 +71,7 @@ class TestNoteService:
         assert created_note.deadline == future_date
 
     def test_create_note_raises_business_exception_if_deadline_is_past(self):
-        past_date = datetime.now(tz).date() - timedelta(days=1)
+        past_date = datetime.now(UTC).date() - timedelta(days=1)
         validator = DummyCreateValidator(
             title="Nota Vencida", content="ABC", deadline=past_date
         )
@@ -106,7 +104,7 @@ class TestNoteService:
         created_note = self.fake_repo.create_note(
             {"title": "Nota Real", "content": "Texto"}
         )
-        past_date = datetime.now(tz).date() - timedelta(days=2)
+        past_date = datetime.now(UTC).date() - timedelta(days=2)
         update_data = DummyUpdateValidator(
             title="Update Inválido",
             content="Texto",

@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
@@ -35,7 +35,7 @@ class SQLAlchemyNoteRepository:
                 query = query.filter(NoteModel.is_done == False)
 
             deadline_filter = filters.get("deadline")
-            today = datetime.now(tz=timezone.utc).date()
+            today = datetime.now(tz=UTC).date()
             if deadline_filter == DeadlineFilterSchema.EXPIRED:
                 query = query.filter(
                     NoteModel.deadline.isnot(None),
