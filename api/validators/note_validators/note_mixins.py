@@ -19,13 +19,13 @@ class ContentMixin(BaseModel):
     ]
 
 class DeadlineMixin(BaseModel):
-    deadline: date | None = Field(
-            None,
-            description="Deadline must be in YYYY-MM-DD format"
-        )
+    deadline: Annotated[
+        date | None,
+        Field(description="Deadline must be in YYYY-MM-DD format")
+    ]
 
 class IsDoneMixin(BaseModel):
-    is_done: bool = Field(
-        False,
-        description="Indicates whether the note is done"
-    )
+    is_done: Annotated[
+        bool,
+        Field(description="Indicates whether the note is done")
+    ]
