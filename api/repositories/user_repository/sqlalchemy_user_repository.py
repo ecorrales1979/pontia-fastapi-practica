@@ -29,8 +29,7 @@ class SQLAlchemyUserRepository:
         try:
             new_user = UserModel(**user_data)
             self._db.add(new_user)
-            self._db.commit()
-            self._db.refresh(new_user)
+            self._db.flush()
             return new_user
         except SQLAlchemyError as exc:
             self._db.rollback()
@@ -43,8 +42,7 @@ class SQLAlchemyUserRepository:
                 return None
             for key, value in user_data.items():
                 setattr(user, key, value)
-            self._db.commit()
-            self._db.refresh(user)
+            self._db.flush()
             return user
         except SQLAlchemyError as exc:
             self._db.rollback()
@@ -56,8 +54,7 @@ class SQLAlchemyUserRepository:
             if not user:
                 return None
             user.password = new_password
-            self._db.commit()
-            self._db.refresh(user)
+            self._db.flush()
             return user
         except SQLAlchemyError as exc:
             self._db.rollback()
@@ -69,8 +66,7 @@ class SQLAlchemyUserRepository:
             if not user:
                 return None
             user.is_active = is_active
-            self._db.commit()
-            self._db.refresh(user)
+            self._db.flush()
             return user
         except SQLAlchemyError as exc:
             self._db.rollback()
@@ -82,8 +78,7 @@ class SQLAlchemyUserRepository:
             if not user:
                 return None
             user.is_admin = is_admin
-            self._db.commit()
-            self._db.refresh(user)
+            self._db.flush()
             return user
         except SQLAlchemyError as exc:
             self._db.rollback()
@@ -95,7 +90,7 @@ class SQLAlchemyUserRepository:
             if not user:
                 return False
             self._db.delete(user)
-            self._db.commit()
+            self._db.flush()
             return True
         except SQLAlchemyError as exc:
             self._db.rollback()
