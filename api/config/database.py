@@ -36,5 +36,3 @@ def get_db_session() -> Generator[Session, None, None]:
         db.close()
 
 DBSessionDependency = Annotated[Session, Depends(get_db_session)]
-
-
