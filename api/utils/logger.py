@@ -20,15 +20,19 @@ class Logger:
         self._logger.setLevel(logging.INFO)
 
         if not self._logger.handlers:
-            handler = RotatingFileHandler(
+            file_handler = RotatingFileHandler(
                 log_file,
                 maxBytes=max_bytes,
                 backupCount=backup_count,
                 encoding="utf-8",
             )
             # Single format for all log messages
-            handler.setFormatter(logging.Formatter("%(message)s"))
-            self._logger.addHandler(handler)
+            file_handler.setFormatter(logging.Formatter("%(message)s"))
+            self._logger.addHandler(file_handler)
+
+            console_handler = logging.StreamHandler()
+            console_handler.setFormatter(logging.Formatter("%(message)s"))
+            self._logger.addHandler(console_handler)
 
     def info(self, message: str, context: dict[str, Any] | None = None) -> None:
         line = self._format_line("INFO", message, context)
