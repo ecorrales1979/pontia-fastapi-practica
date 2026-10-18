@@ -21,7 +21,7 @@ class ContentMixin(BaseModel):
 class DeadlineMixin(BaseModel):
     deadline: Annotated[
         date | None,
-        Field(description="Deadline must be in YYYY-MM-DD format")
+        Field(default=None, description="Deadline must be in YYYY-MM-DD format")
     ]
 
 class IsDoneMixin(BaseModel):
