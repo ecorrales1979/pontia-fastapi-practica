@@ -5,9 +5,39 @@ services:
     ports:
       - "8080:8000"
     volumes:
-      # Mount the local code inside the container for hot reload
       - .:/app
+    networks:
+      - fastapi_network
     environment:
       - ENVIRONMENT=dev
-    # Override the CMD to run in dev mode inside Docker
+      - DATABASE_URL=postgresql://postgres:postgres@data:5432/fastapi_db
+    depends_on:
+      data:
+        condition: service_healthy
     command: uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+  data:
+    image: postgres:18.6-alpine
+    container_name: fastapi_data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=fastapi_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - fastapi_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d fastapi_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  fastapi_network:
+    driver: bridge
