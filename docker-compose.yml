@@ -10,7 +10,7 @@ services:
       - fastapi_network
     environment:
       - ENVIRONMENT=dev
-      - DATABASE_URL=postgresql://postgres:postgres@data:5432/fastapi_db
+      - DATABASE_URL=postgresql+psycopg://postgres:postgres@data:5432/fastapi_db
     depends_on:
       data:
         condition: service_healthy
