@@ -28,7 +28,7 @@ CUSTOM_ESCEPTIONS: dict[type[Exception], ExceptionConfig] = {
         log_method=logger.warning,
     ),
     BusinessException: ExceptionConfig(
-        status_code=status.HTTP_409_CONFLICT,
+        status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
         error_code="BUSINESS_ERROR",
         log_method=logger.warning,
     ),
